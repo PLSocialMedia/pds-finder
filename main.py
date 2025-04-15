@@ -151,4 +151,7 @@ with gr.Blocks() as demo:
     clear_btn.click(fn=lambda: ("", None, None), inputs=None, outputs=[status_text, excel_output, zip_output])
 
 if __name__ == "__main__":
-    demo.launch()
+    import os
+    port = int(os.environ.get("PORT", 7860))  # Render gives us this PORT
+    demo.launch(server_name="0.0.0.0", server_port=port)
+
