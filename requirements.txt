@@ -1,4 +1,7 @@
 gradio
 pandas
-openpyxl
+gspread
+oauth2client
+gspread-formatting
+sendgrid
 requests
