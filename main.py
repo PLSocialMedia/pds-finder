@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import datetime
 import zipfile
 import requests
@@ -13,13 +14,14 @@ from oauth2client.service_account import ServiceAccountCredentials
 from gspread_formatting import format_cell_range, CellFormat, Color
 
 SCOPES    = ["https://www.googleapis.com/auth/spreadsheets"]
-sa_info = json.loads(os.environ["GOOGLE_SA_JSON"])
-creds   = ServiceAccountCredentials.from_json_keyfile_dict(sa_info, SCOPES)
-gc      = gspread.authorize(creds)
+# Load service-account JSON from the environment variable:
+sa_info   = json.loads(os.environ["GOOGLE_SA_JSON"])
+creds     = ServiceAccountCredentials.from_json_keyfile_dict(sa_info, SCOPES)
+gc        = gspread.authorize(creds)
 
-GOOGLE_SHEET_ID = "1bJQH3omGEju1mFR_AX5Fhk2KGWuC9ZvK5YuKf3AyOtA"  # Your master DB
-sheet     = gc.open_by_key(GOOGLE_SHEET_ID).sheet1
-HIGHLIGHT = CellFormat(backgroundColor=Color(1, 1, 0.6))   # Pale yellow
+GOOGLE_SHEET_ID = "1bJQH3omGEju1mFR_AX5Fhk2KGWuC9ZvK5YuKf3AyOtA"
+sheet           = gc.open_by_key(GOOGLE_SHEET_ID).sheet1
+HIGHLIGHT       = CellFormat(backgroundColor=Color(1, 1, 0.6))   # Pale yellow
 
 # === ADMIN ALERT (via SendGrid) ===
 from sendgrid import SendGridAPIClient
@@ -37,8 +39,7 @@ def alert_admin(new_codes: list[str]):
         subject=f"[PDS] {len(new_codes)} new APIR code(s) added",
         plain_text_content="New APIR codes:\n" + "\n".join(new_codes)
     )
-    sg = SendGridAPIClient(SENDGRID_API_KEY)
-    sg.send(message)
+    SendGridAPIClient(SENDGRID_API_KEY).send(message)
 
 # === CONFIGURATION ===
 GOOGLE_SHEET_CSV_URL = (
