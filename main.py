@@ -133,20 +133,28 @@ def process(codes_text: str, file):
     except Exception as e:
         return f"Error creating ZIP: {e}", output_excel, None
 
-    # 6) Append any brand-new APIR codes into the DB sheet, highlight, and notify
+    # 6) Append new APIRs, then highlight exactly the bottom N rows
     if new_codes_for_db:
         today = datetime.date.today().isoformat()
         rows = [[code, "", "", "", f"Added {today}"]
                 for code in new_codes_for_db]
-        next_row = len(db_codes) + 1
+
+        # 6a) append them (no explicit range, so gspread auto-appends)
         sheet.append_rows(rows, value_input_option="USER_ENTERED")
 
-        end_row = next_row + len(rows) - 1
-        format_cell_range(sheet,
-                          f"A{next_row}:A{end_row}",
-                          HIGHLIGHT)
+        # 6b) figure out the true last row number
+        all_vals   = sheet.get_all_values()
+        total_rows = len(all_vals)
+        first_new  = total_rows - len(rows) + 1
+        last_new   = total_rows
 
+        # 6c) highlight those new rows in column A
+        fmt_range = f"A{first_new}:A{last_new}"
+        format_cell_range(sheet, fmt_range, HIGHLIGHT)
+
+        # 6d) ping the admin
         alert_admin(new_codes_for_db)
+
 
     return "Processing complete!", output_excel, zip_path
 
