@@ -13,9 +13,9 @@ from oauth2client.service_account import ServiceAccountCredentials
 from gspread_formatting import format_cell_range, CellFormat, Color
 
 SCOPES    = ["https://www.googleapis.com/auth/spreadsheets"]
-SA_FILE   = "service_account.json"   # Path to your service-account JSON key
-creds     = ServiceAccountCredentials.from_json_keyfile_name(SA_FILE, SCOPES)
-gc        = gspread.authorize(creds)
+sa_info = json.loads(os.environ["GOOGLE_SA_JSON"])
+creds   = ServiceAccountCredentials.from_json_keyfile_dict(sa_info, SCOPES)
+gc      = gspread.authorize(creds)
 
 GOOGLE_SHEET_ID = "1bJQH3omGEju1mFR_AX5Fhk2KGWuC9ZvK5YuKf3AyOtA"  # Your master DB
 sheet     = gc.open_by_key(GOOGLE_SHEET_ID).sheet1
