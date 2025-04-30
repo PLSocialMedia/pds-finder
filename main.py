@@ -95,7 +95,7 @@ def process(file):
         url = task["url"]
         product_name = task["product_name"]
         # Create a safe filename: here we simply append ".pdf" after the product name.
-        filename = f"{product_name}.pdf"
+        filename = f"{product_name} PDS.pdf"
         file_path = os.path.join(PDF_FOLDER, filename)
         try:
             response = requests.get(url)
