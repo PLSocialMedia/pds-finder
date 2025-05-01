@@ -27,7 +27,7 @@ HIGHLIGHT       = CellFormat(backgroundColor=Color(1, 1, 0.6))   # Pale yellow
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-ADMIN_EMAIL      = "you@company.com"            # <-- replace with your email
+ADMIN_EMAIL      = sharukesh.seker@planlogic.com.au            # <-- replace with your email
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 
 def alert_admin(new_codes: list[str]):
