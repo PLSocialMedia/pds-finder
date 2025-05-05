@@ -161,7 +161,7 @@ def process(codes_text: str, file):
 
 # === GRADIO FRONT-END ===
 with gr.Blocks() as demo:
-    gr.Markdown("## PDS Finder — with Auto-DB Sync & Alerts")
+    gr.Markdown("## Planlogic PDS Finder")
 
     with gr.Tab("Upload Excel"):
         file_input = gr.File(label="Upload your Excel file",
